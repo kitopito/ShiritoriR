@@ -19,7 +19,7 @@ serve(async (req) => {
         
         if(nextWord.length > 0 &&
             previousWord.charAt(previousWord.length - 1) !== nextWord.charAt(0)) {
-            return new Response("前の単語に続いていません。", {status: 400});
+            return new Response("前の単語に続いていないのだ。", {status: 400});
         }
 
         previousWord = nextWord;
