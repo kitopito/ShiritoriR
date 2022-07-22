@@ -36,6 +36,10 @@
                 
                 const para = document.querySelector("#previousWord");
                 para.innerText = `前の単語:${previousWord}`;
+                
+                // clear input
+                const input = document.querySelector("#nextWordInput");
+                input.value = "";
             }
         </script>
     </body>
