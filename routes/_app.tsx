@@ -2,11 +2,15 @@
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
 
 import Header from "../components/Header.tsx";
+import { ChakraProvider } from 'chakra-ui';
 
 export default function App({ children }: { children: React.ReactNode }) {
   return (
   <>
-      {children}
+      <ChakraProvider>
+        <Header />
+        {children}
+      </ChakraProvider>
     </>
   );
 }

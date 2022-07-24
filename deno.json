@@ -15,7 +15,7 @@
   },
   "importMap": "import_map.json",
   "tasks": {
-    "dev": "deno run -A -q server.ts --dev",
+    "dev": "deno run --allow-net --watch -A -q server.ts --dev",
     "start": "deno run -A server.ts",
     "opt": "deno run -A server.ts --optimize"
   }
