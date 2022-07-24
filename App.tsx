@@ -3,14 +3,14 @@
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
 import React, { useState, useMemo ,FC} from 'react';
 import { Link } from 'aleph/react';
-import { Button } from "chakra-ui";
+import { Button, Box } from "chakra-ui";
 
 export default function App() {
     const [nextWordInput, setNextWord] = useState('');
     const [previousWord, setPreviousWord] = useState('hoge');
 
     return(
-        <div>
+        <Box backgroundColor={"brue.500"} color={"brue.500"}><div>
             <h1>しりとり</h1>
             <p id="previousWord">前の単語:{previousWord}</p>
             <input id="nextWordInput" type="text" value={nextWordInput} onChange={(event) => {
@@ -49,7 +49,7 @@ export default function App() {
               </Link>
             </nav>
             <Button as="a" href="./pages/robo">Shiritori Robo</Button>
-        </div>
+        </div></Box>
     );
         
 }
