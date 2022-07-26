@@ -1,8 +1,8 @@
 import { DependencyInjectable } from "../di/DependencyInjectable.ts";
-import { useShiritoriReducer } from "../hooks/useShiritoriReducer.ts";
 import { Supplyer } from "../di/supplyer.ts";
 import { useDI } from "../di/useDI.tsx";
 import { RandomLogic, RandomLogicSupplyer } from "../logic/random_logic.ts";
+import { useStore } from "../hooks/store.tsx";
 
 export const RandomBuffSupplyer = new Supplyer<RandomBuff>(() => {
     return new RandomBuff();
@@ -15,18 +15,22 @@ export class RandomBuff implements DependencyInjectable {
     private logic;
     
     constructor() {
-        [this.state, this.dispatch] = useShiritoriReducer();
+//        [this.state, this.dispatch] = useShiritoriReducer();
+        console.log("ほげほげ　random matching page created");
+        [this.state, this.dispatch] = useStore().shiritoriReducer;
         this.logic = useDI<RandomLogic>(RandomLogicSupplyer);
 
 //        this.reset();
     }
 
     set NextWord(_word: string) {
+        console.log(this.state);
         console.log("setNextWord");
         this.dispatch({type: 'CHANGE_VALUE', data: _word, field: 'nextWordInput'});
     }
 
     private set PreviousWord(_word: string) {
+        console.log(this.state);
         console.log("setPreviousWord");
         this.dispatch({type: 'CHANGE_VALUE', data: _word, field: 'previousWord'});
     }
@@ -52,9 +56,11 @@ export class RandomBuff implements DependencyInjectable {
         
 //                para.innerText = `前の単語:${previousWord}`;
         */
-        if(this.logic.isWordUpdatable(this.previousWord, nextWord)) {
+        if(this.logic.isWordUpdatable(this.previousWord, nextWord, this.state.wordHistory)) {
             this.PreviousWord = nextWord;
             console.log(this.previousWord);
+            
+            this.addWordHistory(nextWord);
             
             // clear input
     //                const input = document.querySelector("#nextWordInput");
@@ -74,6 +80,10 @@ export class RandomBuff implements DependencyInjectable {
     
     get previousWord() {
         return this.state.previousWord;
+    }
+    
+    private addWordHistory(nextWord: string) {
+        this.dispatch({type: 'ADD_WORD_HISTORY', data: nextWord, field: 'wordHistory'});
     }
 
     public TYPE = 'RandomBuff';

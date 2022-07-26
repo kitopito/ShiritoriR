@@ -1,13 +1,17 @@
-import { useReducer } from 'react'
+import React, { useReducer, useMemo } from 'react';
 
 const initialState: State = {
   nextWordInput: '',
   previousWord: 'しりとり',
+  wordHistory: ['しりとり'] as Array<string>,
 }
+
+const shiritoriContext = React.createContext(initialState);
 
 interface State {
   nextWordInput: string,
   previousWord: string,
+  wordHistory: Array<string>,
 }
 interface Action {
   type: string,
@@ -24,6 +28,12 @@ const reducer = (state: State, action: Action) => {
         ...state,
         [action.field]: action.data,
       };
+    case 'ADD_WORD_HISTORY':
+      state.wordHistory.push(action.data);
+      return {
+        ...state,
+        wordHistory: state.wordHistory,
+      }
     default:
       return state;
   }
