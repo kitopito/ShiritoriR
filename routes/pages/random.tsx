@@ -3,8 +3,8 @@
 
 import { Head, useData } from "aleph/react";
 import React, { useState, useMemo, useReducer } from 'react';
-import { Badge, Flex, Heading, HStack, Link, Text, VStack } from "chakra-ui";
-import { Button, Input } from "chakra-ui";
+import { Badge, Flex, Heading, HStack, Link, Text, VStack, 
+    Button, Input } from "chakra-ui";
 import { useShiritoriReducer } from "../../hooks/useShiritoriReducer.ts";
 import { RandomBuff, RandomBuffSupplyer } from "../../logic_buff/random_buff.ts";
 import { useDI } from "../../di/useDI.tsx";
