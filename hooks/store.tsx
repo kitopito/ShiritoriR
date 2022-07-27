@@ -18,6 +18,7 @@ const globalContext = React.createContext(initialStoreState);
 export const StoreProvider = ({ children }) => {
   console.log("ほげほげ　store created");
   const [store, dispatch] = useShiritoriReducer();
+  console.log(store);
 
   // Storeが変化した時だけリレンダリングするようuseMemoを使用
   /*
@@ -36,7 +37,8 @@ export const StoreProvider = ({ children }) => {
 
 export function useStore() {
   console.log("ふがふが　store used");
-//  const contextValue = React.useContext(globalContext);
+  const contextValue = React.useContext(globalContext);
+  console.log(contextValue.shiritoriReducer[0]);
 //  return [contextValue[0], contextValue[1]];
   return React.useContext(globalContext);
 }
