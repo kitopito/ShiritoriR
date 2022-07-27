@@ -20,6 +20,7 @@ interface Action {
 }
 
 const reducer = (state: State, action: Action) => {
+  console.log("ふがふが　reducer working");
   console.log(state);
   console.log(action);
   switch(action.type) {
@@ -40,6 +41,7 @@ const reducer = (state: State, action: Action) => {
 };
 
 export function useShiritoriReducer() {
+    console.log("ふがふが　shiritori reducer used");
     const [store, dispatch] = useReducer(reducer, initialState);
     return [store, dispatch];
 }

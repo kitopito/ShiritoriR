@@ -12,7 +12,8 @@ export default function Random() {
 
 //  const randomBuff = new RandomBuff();
   const randomBuff = useDI<RandomBuff>(RandomBuffSupplyer);
-  console.log("ふがふが previous word: " + randomBuff.previousWord);
+  console.log("ふがふが previous word: ");
+  console.log(randomBuff.previousWord);
 
 /*
   function setNextWord(_word: string) {

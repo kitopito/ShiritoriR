@@ -19,6 +19,7 @@ export const DI_Provider = ({ children }) => {
 };
 
 export function useDI<T extends DependencyInjectable>(supplyer: Supplyer<T>): T {
+  console.log("ふがふが　di used");
   const contextValue = React.useContext(DI_Context);
   contextValue.forEach((value: { SUPPLYER: Supplyer<T>; }, index: any, array: any) => {
       // 既に指定した型のインスタンスが存在する場合はその型の既存のインスタンスを返す

@@ -3,12 +3,14 @@ import { Supplyer } from "../di/supplyer.ts";
 //import { useShiritoriReducer } from "../hooks/useShiritoriReducer.ts";
 
 export const RandomLogicSupplyer = new Supplyer<RandomLogic>(() => {
+    console.log("ふがふが　random logic supplyer called");
     return new RandomLogic();
 });
 
 export class RandomLogic implements DependencyInjectable {
 //    private state;
     constructor(/*_state*/) {
+      console.log("ほげほげ　random logic 作ったナリ");
 //        this.state = _state;
     }
     
@@ -17,6 +19,7 @@ export class RandomLogic implements DependencyInjectable {
             nextWord: string,
             wordHistory: Array<string>) {
         
+      console.log("ふがふが　is word updatable working");
         if(nextWord.includes(' ') || nextWord.includes('　')) {
             alert("空白を含めないでほしいのだ。");
             return false;

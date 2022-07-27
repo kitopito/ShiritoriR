@@ -5,6 +5,7 @@ import { RandomLogic, RandomLogicSupplyer } from "../logic/random_logic.ts";
 import { useStore } from "../hooks/store.tsx";
 
 export const RandomBuffSupplyer = new Supplyer<RandomBuff>(() => {
+    console.log("ふがふが　rancom buff supplyer called");
     return new RandomBuff();
 });
 
@@ -19,6 +20,7 @@ export class RandomBuff implements DependencyInjectable {
         console.log("ほげほげ　random matching page created");
         [this.state, this.dispatch] = useStore().shiritoriReducer;
         this.logic = useDI<RandomLogic>(RandomLogicSupplyer);
+        console.log(this.state);
 
 //        this.reset();
     }
@@ -75,14 +77,19 @@ export class RandomBuff implements DependencyInjectable {
     
     
     get nextWordInput() {
+        console.log("ふがふが get next word input");
         return this.state.nextWordInput;   
     }
     
     get previousWord() {
+        console.log("ふがふが get next word input");
+        console.log(this.state);
         return this.state.previousWord;
     }
     
     private addWordHistory(nextWord: string) {
+        console.log("ふがふが add word history");
+        console.log(this.state);
         this.dispatch({type: 'ADD_WORD_HISTORY', data: nextWord, field: 'wordHistory'});
     }
 

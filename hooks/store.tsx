@@ -35,6 +35,7 @@ export const StoreProvider = ({ children }) => {
 };
 
 export function useStore() {
+  console.log("ふがふが　store used");
 //  const contextValue = React.useContext(globalContext);
 //  return [contextValue[0], contextValue[1]];
   return React.useContext(globalContext);
