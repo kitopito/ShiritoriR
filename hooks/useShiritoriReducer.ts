@@ -43,5 +43,6 @@ const reducer = (state: State, action: Action) => {
 export function useShiritoriReducer() {
     console.log("ふがふが　shiritori reducer used");
     const [store, dispatch] = useReducer(reducer, initialState);
+    console.log(store);
     return [store, dispatch];
 }
