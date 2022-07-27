@@ -3,9 +3,7 @@
 
 import { Head, useData } from "aleph/react";
 import React, { useState, useMemo, useReducer } from 'react';
-import { Badge, Flex, Heading, HStack, Link, Text, VStack, 
-    Button, Input } from "chakra-ui";
-import { useShiritoriReducer } from "../../hooks/useShiritoriReducer.ts";
+import { Badge, Flex, Heading, HStack, Link, Text, VStack, Button, Input } from "chakra-ui";
 import { RandomBuff, RandomBuffSupplyer } from "../../logic_buff/random_buff.ts";
 import { useDI } from "../../di/useDI.tsx";
 
@@ -14,6 +12,7 @@ export default function Random() {
 
 //  const randomBuff = new RandomBuff();
   const randomBuff = useDI<RandomBuff>(RandomBuffSupplyer);
+  console.log("ふがふが previous word: " + randomBuff.previousWord);
 
 /*
   function setNextWord(_word: string) {
