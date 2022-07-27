@@ -40,5 +40,7 @@ export function useStore() {
   const contextValue = React.useContext(globalContext);
   console.log(contextValue.shiritoriReducer[0]);
 //  return [contextValue[0], contextValue[1]];
-  return React.useContext(globalContext);
+//  return React.useContext(globalContext);
+  const kari: StoreState = {shiritoriReducer: useShiritoriReducer() as stateUndDispatch};
+  return kari;
 }
