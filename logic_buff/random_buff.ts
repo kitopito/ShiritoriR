@@ -151,8 +151,9 @@ export class RandomBuff implements DependencyInjectable {
         const subscription = supabase.from("rooms").on('UPDATE', (payload) => {
             console.log("ふがふが　supabase update されたナリ");
             console.log(payload);
+            const newData = payload.new;
             // roomのhistoryがupdateされたらその値を取得する
-            nextHistory = payload.history[payload.history.length - 1];
+            const nextHistory = newData.history[newData.history.length - 1];
             this.previousWord = nextHistory.word;
 
             // gameがcontinueならしりとりを続ける
