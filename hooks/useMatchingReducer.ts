@@ -36,7 +36,7 @@ const reducer = (state: State, action: Action) => {
   console.log(state);
   console.log(action);
   switch(action.type) {
-    case 'CHANGE_MATCHIG_STATE':
+    case 'CHANGE_MATCHING_STATE':
       return {
         ...state,
         matchingState: action.data,

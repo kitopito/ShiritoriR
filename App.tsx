@@ -3,12 +3,12 @@
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
 import React, { useState, FC, useMemo} from 'react';
 import { Link } from 'aleph/react';
-import { Button, Box } from "chakra-ui";
+//import {Button, Paper, Tabs, Tab} from 'material-ui-core';
 
 export default function App() {
 
     return(
-        <Box backgroundColor={"brue.500"} color={"brue.500"}><div>
+        <div>
             <h1>SHIRITORING BAY</h1>
             <nav className="mt-8">
               <Link
@@ -19,9 +19,11 @@ export default function App() {
                 対戦モード
               </Link>
             </nav>
-            <Button as="a" href="./pages/robo">Shiritori Robo</Button>
-        </div></Box>
+        </div>
     );
+    /*
+            <Button as="a" href="./pages/robo">Shiritori Robo</Button>
+    */
         
 }
 /*

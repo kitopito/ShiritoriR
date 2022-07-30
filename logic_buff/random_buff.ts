@@ -69,6 +69,12 @@ export class RandomBuff implements DependencyInjectable {
         
 //                para.innerText = `前の単語:${previousWord}`;
         */
+        if(this.isEndingAtN(nextWord)) {
+            // 「ん」で終わっていたら負けにする
+            this.lose();
+            return;
+        }
+
         if(this.logic.isWordUpdatable(this.previousWord, nextWord, this.state.wordHistory)) {
             this.PreviousWord = nextWord;
             console.log(this.previousWord);
@@ -78,6 +84,7 @@ export class RandomBuff implements DependencyInjectable {
             // clear input
     //                const input = document.querySelector("#nextWordInput");
     //                input.value = "";
+            console.log("ふがふが　reset");
             this.NextWord = '';
         }
     }
@@ -103,10 +110,15 @@ export class RandomBuff implements DependencyInjectable {
         console.log(this.state);
         this.dispatch({type: 'ADD_WORD_HISTORY', data: nextWord, field: 'wordHistory'});
     }
+    
+    get pageState(): MatchingState {
+        console.log(this.matchingState.matchingState);
+        return this.matchingState.matchingState;
+    }
 
     async toWaitingState() {
         console.log("ふがふが　to waiting state");
-        this.matchingDispatch({type: "CHANGE_MACHING_STATE", data: MatchingState.MATCHING});
+        this.matchingDispatch({type: "CHANGE_MATCHING_STATE", data: MatchingState.MATCHING});
         const userID = new Date().getTime();
         const userIdText = userID.toString();
         console.log(userIdText);
@@ -139,72 +151,51 @@ export class RandomBuff implements DependencyInjectable {
             }
             
             // 多分プライマリキーを決めないとsubscriptionできないZ
-            let subscriptionCalledNum = 0;
-            const subscription = supabase.from("wating").on('INSERT', payload => {
+            const subscription = supabase.from("wating").on('INSERT', async payload => {
                 console.log("ふがふが　insert されたナリ");
                 console.log(payload);
 
-                // なぜか二回インサートされてるので後から追加した方を消す
-                if(subscriptionCalledNum == 0) {(async function () {
-                    const insertedData = payload.new;
-                    const deleteTargetId = insertedData.id;
-                    try {
-                        console.log("ふがふが　delete するのだ");
-                        const { error } = await supabase
-                            .from('wating')
-                            .delete()
-                            .match({id: deleteTargetId});
-                        if(error) {
-                            throw error;
-                        }
-                    } catch(error) {
-                        alert("ぴよぴよ supabase delete error ナリ");
+                // 相手が入ってきたときの処理
+                const insertedData = payload.new;
+                const roomId = insertedData.user_id;
+                // あとから入ってきた人のuser_idをroom_idとする
+                this.matchingDispatch({type: "SET_ROOM_ID", data: roomId});
+                try {
+                    const { error } = await supabase.from('rooms')
+                        .insert([{room_id: roomId, history: {}}]);
+                    if(error) {throw error;}
+                } catch(error) { alert("ぴよぴよ supabase insert error ナリ");}
+
+                // 最初の単語を決める
+                try {
+                    console.log("ふがふが　insert するナリ");
+                    const { error } = await supabase
+                        .from('rooms')
+                        .update([{history: {word: 'しりとり'}}])
+                        .match({room_id: roomId});
+                    if(error) {
+                        throw error;
                     }
-                    return;
-                })();} else {(async function() {
-                    // 相手が入ってきたときの処理
-                    const insertedData = payload.new;
-                    const roomId = insertedData.user_id;
-                    // あとから入ってきた人のuser_idをroom_idとする
-                    this.matchingDispatch({type: "SET_ROOM_ID", data: roomId});
-                    try {
-                        const { error } = await supabase.from('rooms')
-                            .insert([{room_id: roomId, history: {}}]);
-                        if(error) {throw error;}
-                    } catch(error) { alert("ぴよぴよ supabase insert error ナリ");}
+                } catch(error) {
+                    alert("ぴよぴよ supabase insert error ナリ");
+                }
 
-                    // 最初の単語を決める
-                    try {
-                        console.log("ふがふが　insert するナリ");
-                        const { error } = await supabase
-                            .from('rooms')
-                            .update([{history: {word: 'しりとり'}}])
-                            .match({room_id: roomId});
-                        if(error) {
-                            throw error;
-                        }
-                    } catch(error) {
-                        alert("ぴよぴよ supabase insert error ナリ");
-                    }
+                // watingから自分と相手の情報を消す
+                const meUndOppose = (await supabase.from('wating').select('*')).data;
+                meUndOppose?.forEach(async (value, index, array) => {try {
+                    console.log("ふがふが　delete するのだ");
+                    const { error } = await supabase.from('wating')
+                        .delete().match({id: value.id});
+                    if(error) {throw error;}
+                } catch(error) {alert("ぴよぴよ supabase delete error ナリ");}});
 
-                    // watingから自分と相手の情報を消す
-                    const meUndOppose = (await supabase.from('wating').select('*')).data;
-                    meUndOppose?.forEach(async (value, index, array) => {try {
-                        console.log("ふがふが　delete するのだ");
-                        const { error } = await supabase.from('wating')
-                            .delete().match({id: value.id});
-                        if(error) {throw error;}
-                    } catch(error) {alert("ぴよぴよ supabase delete error ナリ");}});
+                await supabase.removeSubscription(subscription);
 
-                    await supabase.removeSubscription(subscription);
-
-                    // 相手のターンにする
-                    this.matchingDispatch({
-                        type: "CHANGE_MACHING_STATE", 
-                        data: MatchingState.OPPONENTTURN});
-                    console.log("相手のターン！");
-                })();}
-                subscriptionCalledNum++;
+                // 相手のターンにする
+                this.matchingDispatch({
+                    type: "CHANGE_MATCHING_STATE", 
+                    data: MatchingState.OPPONENTTURN});
+                console.log("相手のターン！");
             }).subscribe();
         } else {
             console.log("待ってるひとがいた");
@@ -223,38 +214,13 @@ export class RandomBuff implements DependencyInjectable {
             */
 
             console.log("ふがふが　subscription");
-            let subscriptionACalledNum = 0;
-            const subscriptionA = supabase.from("wating").on('INSERT', (payload) => {
-                console.log("ふがふが　insert されたのだ");
-                console.log(payload);
-                // なぜか二回インサートされてるので後から追加した方を消す
-                if(subscriptionACalledNum == 0) {(async function () {
-                    const insertedData = payload.new;
-                    const deleteTargetId = insertedData.id;
-                    try {
-                        console.log("ふがふが　delete するのだ");
-                        const { error } = await supabase
-                            .from('wating')
-                            .delete()
-                            .match({id: deleteTargetId});
-                        if(error) {
-                            throw error;
-                        }
-                    } catch(error) {
-                        alert("ぴよぴよ supabase delete error ナリ");
-                    }
-                    supabase.removeSubscription(subscriptionA);
-                    return;
-                })();}
-                subscriptionACalledNum++;
-            }).subscribe();
 
             // waitingのデータが消されたらroomに参加して自分の番にする
             const subscriptionD = supabase.from("wating").on('DELETE', (payload) => {
                 const roomId = userIdText;
                 this.matchingDispatch({type: "SET_ROOM_ID", data: roomId});
                 this.matchingDispatch({
-                    type: "CHANGE_MACHING_STATE", 
+                    type: "CHANGE_MATCHING_STATE", 
                     data: MatchingState.MYTURN});
                 console.log("俺のターン！");
                 supabase.removeSubscription(subscriptionD);
@@ -262,10 +228,22 @@ export class RandomBuff implements DependencyInjectable {
         }
     }
     
+    private isEndingAtN(_word: string): boolean{
+        // 最後の文字が「ん」で終わっているかどうか
+        const subscriptOfLastLetter = _word.length - 1;
+        return 'ん' == _word.charAt(subscriptOfLastLetter);
+    }
+    
     private toMyTurn() {
         this.matchingDispatch({
-            type: "CHANGE_MACHING_STATE", 
+            type: "CHANGE_MATCHING_STATE", 
             data: MatchingState.MYTURN});
+    }
+    
+    private lose() {
+        this.matchingDispatch({
+            type: "CHANGE_MATCHING_STATE", 
+            data: MatchingState.LOSE});
     }
 
     public TYPE = 'RandomBuff';
