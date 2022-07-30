@@ -3,7 +3,7 @@
 
 import { Head, useData } from "aleph/react";
 //import { useState } from "https://esm.sh/v87/@types/react@18.0.15/index.d.ts";
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 
 type TodoItem = {
   id: number;

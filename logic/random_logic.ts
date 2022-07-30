@@ -1,5 +1,6 @@
 import { DependencyInjectable } from "../di/DependencyInjectable.ts";
 import { Supplyer } from "../di/supplyer.ts";
+import { supabase } from "../supabase.ts";
 //import { useShiritoriReducer } from "../hooks/useShiritoriReducer.ts";
 
 export const RandomLogicSupplyer = new Supplyer<RandomLogic>(() => {
@@ -68,6 +69,8 @@ export class RandomLogic implements DependencyInjectable {
           return false;
         }
   }
+  
     public TYPE = 'RandomLogic';
     public SUPPLYER: Supplyer<RandomLogic> = RandomLogicSupplyer;
+    public updateState() {}
 }

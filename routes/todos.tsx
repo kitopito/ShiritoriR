@@ -2,7 +2,7 @@
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
 
 import { Head, useData } from "aleph/react";
-import React, { useState, useMemo } from 'react'
+import React, { useState } from 'react'
 
 type TodoItem = {
   id: number;

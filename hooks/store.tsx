@@ -1,5 +1,6 @@
-import React, { useReducer, useMemo} from 'react';
+import React, { useReducer } from 'react';
 import { ReducerState, Dispatch} from 'react';
+import { useMatchingReducer } from "./useMatchingReducer.ts";
 import { useShiritoriReducer } from "./useShiritoriReducer.ts";
 
 export type stateUndDispatch = [ReducerState<any>, Dispatch<any>];
@@ -7,10 +8,12 @@ export type stateUndDispatch = [ReducerState<any>, Dispatch<any>];
 // 全部の値をstateUndDispatchにする
 interface StoreState {
     shiritoriReducer: stateUndDispatch,
+    matchingReducer: stateUndDispatch,
 }
 
 const initialStoreState: StoreState = {
   shiritoriReducer: [{}, ()=>{}] as stateUndDispatch,
+  matchingReducer: [{}, ()=>{}] as stateUndDispatch,
 };
   
 const globalContext = React.createContext(initialStoreState);
@@ -26,7 +29,10 @@ export const StoreProvider = ({ children }) => {
     [store, dispatch]
   );
   */
-  const contextValue: StoreState = {shiritoriReducer: [store, dispatch]};
+  const contextValue: StoreState = {
+    shiritoriReducer: [store, dispatch],
+    matchingReducer: useMatchingReducer() as stateUndDispatch,
+  };
 
   return (
     <globalContext.Provider value={contextValue}>
@@ -41,6 +47,13 @@ export function useStore() {
   console.log(contextValue.shiritoriReducer[0]);
 //  return [contextValue[0], contextValue[1]];
 //  return React.useContext(globalContext);
-  const kari: StoreState = {shiritoriReducer: useShiritoriReducer() as stateUndDispatch};
+
+//  useContextで値を返すのは諦めた。
+//  localhostでは実行できるがdeno deployではエラーになるためである。
+//  多分stateの参照が死んでいるからだと思う。
+  const kari: StoreState = {
+    shiritoriReducer: useShiritoriReducer() as stateUndDispatch,
+    matchingReducer: useMatchingReducer() as stateUndDispatch,
+  };
   return kari;
 }
