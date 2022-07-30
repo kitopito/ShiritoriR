@@ -48,7 +48,7 @@ export class RandomBuff implements DependencyInjectable {
         this.dispatch({type: 'CHANGE_VALUE', data: _word, field: 'previousWord'});
     }
     
-    submission() {
+    async submission() {
         console.log("ほげ");
         console.log(this.state.nextWordInput);
         const nextWord = this.nextWordInput;
@@ -85,7 +85,21 @@ export class RandomBuff implements DependencyInjectable {
     //                const input = document.querySelector("#nextWordInput");
     //                input.value = "";
             console.log("ふがふが　reset");
+            
+            const rooms = (await supabase.from('rooms').select("*")).data;
+            // 仮の実装としてroomsの配列の最初を取るようにする
+            const currentData = rooms[0];
+//            this.matchingState.roomId
+            // roomに単語を登録する 状態はcontinueとする
+            currentData.history.push({word: nextWord, game: 'continue'})
+            const { error } = await supabase
+                .from('rooms')
+                .update([{history: currentData.history}])
+                .match({room_id: this.matchingState.roomId});
+            
             this.NextWord = '';
+
+            this.toOpponentTurn();
         }
     }
     
@@ -114,6 +128,53 @@ export class RandomBuff implements DependencyInjectable {
     get pageState(): MatchingState {
         console.log(this.matchingState.matchingState);
         return this.matchingState.matchingState;
+    }
+
+    private isEndingAtN(_word: string): boolean{
+        // 最後の文字が「ん」で終わっているかどうか
+        const subscriptOfLastLetter = _word.length - 1;
+        return 'ん' == _word.charAt(subscriptOfLastLetter);
+    }
+    
+    private toMyTurn() {
+        this.matchingDispatch({
+            type: "CHANGE_MATCHING_STATE", 
+            data: MatchingState.MYTURN});
+    }
+    
+    private toOpponentTurn() {
+        this.matchingDispatch({
+            type: "CHANGE_MATCHING_STATE", 
+            data: MatchingState.OPPONENTTURN});
+        
+        // roomが更新されるまで待つ
+        const subscription = supabase.from("rooms").on('UPDATE', (payload) => {
+            // roomのhistoryがupdateされたらその値を取得する
+            nextHistory = payload.history[payload.history.length - 1];
+            this.previousWord = nextHistory.word;
+
+            // gameがcontinueならしりとりを続ける
+            if(nextHistory.game == 'continue') {
+                this.toMyTurn();
+                console.log("俺のターン！");
+            } else if(nextHistory.game == 'lost') {
+            // gameがlostなら相手の負けとする
+                this.win();
+            }
+            supabase.removeSubscription(subscription);
+        }).subscribe();
+    }
+    
+    private lose() {
+        this.matchingDispatch({
+            type: "CHANGE_MATCHING_STATE", 
+            data: MatchingState.LOSE});
+    }
+
+    private win() {
+        this.matchingDispatch({
+            type: "CHANGE_MATCHING_STATE", 
+            data: MatchingState.WIN});
     }
 
     async toWaitingState() {
@@ -171,7 +232,7 @@ export class RandomBuff implements DependencyInjectable {
                     console.log("ふがふが　insert するナリ");
                     const { error } = await supabase
                         .from('rooms')
-                        .update([{history: {word: 'しりとり'}}])
+                        .update([{history: [{word: 'しりとり', game: 'continue'}]}])
                         .match({room_id: roomId});
                     if(error) {
                         throw error;
@@ -228,24 +289,6 @@ export class RandomBuff implements DependencyInjectable {
         }
     }
     
-    private isEndingAtN(_word: string): boolean{
-        // 最後の文字が「ん」で終わっているかどうか
-        const subscriptOfLastLetter = _word.length - 1;
-        return 'ん' == _word.charAt(subscriptOfLastLetter);
-    }
-    
-    private toMyTurn() {
-        this.matchingDispatch({
-            type: "CHANGE_MATCHING_STATE", 
-            data: MatchingState.MYTURN});
-    }
-    
-    private lose() {
-        this.matchingDispatch({
-            type: "CHANGE_MATCHING_STATE", 
-            data: MatchingState.LOSE});
-    }
-
     public TYPE = 'RandomBuff';
     public SUPPLYER: Supplyer<RandomBuff> = RandomBuffSupplyer;
     public updateState() {

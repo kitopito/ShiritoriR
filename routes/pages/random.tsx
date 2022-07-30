@@ -47,7 +47,10 @@ export default function Random() {
       <h1>勝った！！</h1>
     );
     case MatchingState.OPPONENTTURN: return (
-      <h1>相手の番です</h1>
+      <div>
+        <h1>相手の番です</h1>
+        <p id="previousWord">前の単語:{randomBuff.previousWord}</p>
+      </div>
     );
     case MatchingState.MYTURN: return (
       <div>
