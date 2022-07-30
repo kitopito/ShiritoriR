@@ -1,7 +1,7 @@
 // support jsx on deno deploy
 //
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
-import React, { useState, FC} from 'react';
+import React, { useState, FC, useMemo} from 'react';
 import { Link } from 'aleph/react';
 import { Button, Box } from "chakra-ui";
 

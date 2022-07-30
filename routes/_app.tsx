@@ -1,7 +1,7 @@
 // support jsx on deno deploy
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
 
-import React from "react";
+import React, { useMemo } from "react";
 import Header from "../components/Header.tsx";
 import { ChakraProvider } from 'chakra-ui';
 import { StoreProvider } from "../hooks/store.tsx";

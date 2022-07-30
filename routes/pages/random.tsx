@@ -2,7 +2,7 @@
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
 
 import { Head, useData } from "aleph/react";
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useEffect, useMemo } from 'react';
 import { Badge, Flex, Heading, HStack, Link, Text, VStack, Button, Input } from "chakra-ui";
 import { RandomBuff, RandomBuffSupplyer } from "../../logic_buff/random_buff.ts";
 import { useDI } from "../../di/useDI.tsx";
@@ -16,7 +16,7 @@ export default function Random() {
   // strictモードのせいでuseEffectが二回呼ばれてる可能性が微レ存
   useEffect(() => {
       console.log("ふがふが use effect");
-      randomBuff.toWaitingState();
+//      randomBuff.toWaitingState();
   },[1]);
 
   console.log("ふがふが previous word: ");
