@@ -260,6 +260,20 @@ export class RandomBuff implements DependencyInjectable {
             }).subscribe();
         } else {
             console.log("待ってるひとがいた");
+
+            console.log("ふがふが　subscription");
+            // waitingのデータが消されたらroomに参加して自分の番にする
+            // もともとはinsertのほうが先だったけど間に合わないからsubscriptionを前にした
+            const subscriptionD = supabase.from("wating").on('DELETE', (payload) => {
+                const roomId = userIdText;
+                this.matchingDispatch({type: "SET_ROOM_ID", data: roomId});
+                this.matchingDispatch({
+                    type: "CHANGE_MATCHING_STATE", 
+                    data: MatchingState.MYTURN});
+                console.log("俺のターン！");
+                supabase.removeSubscription(subscriptionD);
+            }).subscribe();
+
 //            try {
                 console.log("ふがふが　insert するのだ");
                 const { error } = await supabase
@@ -273,19 +287,6 @@ export class RandomBuff implements DependencyInjectable {
                 alert("ぴよぴよ supabase insert error ナリ");
             }
             */
-
-            console.log("ふがふが　subscription");
-
-            // waitingのデータが消されたらroomに参加して自分の番にする
-            const subscriptionD = supabase.from("wating").on('DELETE', (payload) => {
-                const roomId = userIdText;
-                this.matchingDispatch({type: "SET_ROOM_ID", data: roomId});
-                this.matchingDispatch({
-                    type: "CHANGE_MATCHING_STATE", 
-                    data: MatchingState.MYTURN});
-                console.log("俺のターン！");
-                supabase.removeSubscription(subscriptionD);
-            }).subscribe();
         }
     }
     
