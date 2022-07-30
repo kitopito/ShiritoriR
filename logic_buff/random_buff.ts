@@ -154,7 +154,7 @@ export class RandomBuff implements DependencyInjectable {
             const newData = payload.new;
             // roomのhistoryがupdateされたらその値を取得する
             const nextHistory = newData.history[newData.history.length - 1];
-            this.previousWord = nextHistory.word;
+            this.PreviousWord = nextHistory.word;
 
             // gameがcontinueならしりとりを続ける
             if(nextHistory.game == 'continue') {
