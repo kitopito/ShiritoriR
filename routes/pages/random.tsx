@@ -20,9 +20,9 @@ export default function Random() {
   // strictモードのせいでuseEffectが二回呼ばれてるので本番モードで実行すること
   useEffect(() => {
       console.log("ふがふが use effect");
-//      randomBuff.toWaitingState();
+      randomBuff.toWaitingState();
 //      UIのテストのためにすぐ自分の番にする
-      randomBuff.toMyTurn();
+//      randomBuff.toMyTurn();
   },[1]);
 
   console.log("ふがふが previous word: ");
