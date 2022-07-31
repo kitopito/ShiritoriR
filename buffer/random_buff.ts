@@ -248,12 +248,19 @@ export class RandomBuff implements DependencyInjectable {
                 } catch(error) { alert("ぴよぴよ supabase insert error ナリ");}
 
                 // 最初の単語を決める
-                this.setFirstWord();
+                const dictionaryLength = Dictionary.length;
+                const randomIndex = Math.floor(Math.random() * dictionaryLength);
+                const _index = Dictionary[randomIndex];
+                const _word = _index.word;
+
+                this.PreviousWord = _word;
+                this.addWordHistory(_word);
+
                 try {
                     console.log("ふがふが　insert するナリ");
                     const { error } = await supabase
                         .from('rooms')
-                        .update([{history: [{word: this.previousWord, game: 'continue'}]}])
+                        .update([{history: [{word: _word, game: 'continue'}]}])
                         .match({room_id: roomId});
                     if(error) {
                         throw error;
@@ -317,16 +324,6 @@ export class RandomBuff implements DependencyInjectable {
             }
             */
         }
-    }
-
-    private setFirstWord() {
-        const dictionaryLength = Dictionary.length;
-        const randomIndex = Math.floor(Math.random() * dictionaryLength);
-        const _index = Dictionary[randomIndex];
-        const _word = _index.word;
-
-        this.PreviousWord = _word;
-        this.addWordHistory(_word);
     }
     
     public TYPE = 'RandomBuff';
