@@ -2,8 +2,8 @@ import React, { useReducer } from 'react';
 
 const initialState: State = {
   nextWordInput: '',
-  previousWord: 'しりとり',
-  wordHistory: ['しりとり'] as Array<string>,
+  previousWord: '',
+  wordHistory: [] as Array<string>,
 }
 
 const shiritoriContext = React.createContext(initialState);

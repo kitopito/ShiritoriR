@@ -2,6 +2,7 @@ import React, { useReducer } from 'react';
 import { ReducerState, Dispatch} from 'react';
 import { useMatchingReducer } from "./useMatchingReducer.ts";
 import { useShiritoriReducer } from "./useShiritoriReducer.ts";
+import { useRobotReducer } from "./useRobotReducer.ts";
 
 export type stateUndDispatch = [ReducerState<any>, Dispatch<any>];
 
@@ -9,11 +10,13 @@ export type stateUndDispatch = [ReducerState<any>, Dispatch<any>];
 interface StoreState {
     shiritoriReducer: stateUndDispatch,
     matchingReducer: stateUndDispatch,
+    robotReducer: stateUndDispatch,
 }
 
 const initialStoreState: StoreState = {
   shiritoriReducer: [{}, ()=>{}] as stateUndDispatch,
   matchingReducer: [{}, ()=>{}] as stateUndDispatch,
+  robotReducer: [{}, ()=>{}] as stateUndDispatch,
 };
   
 const globalContext = React.createContext(initialStoreState);
@@ -32,6 +35,7 @@ export const StoreProvider = ({ children }) => {
   const contextValue: StoreState = {
     shiritoriReducer: [store, dispatch],
     matchingReducer: useMatchingReducer() as stateUndDispatch,
+    robotReducer: useRobotReducer() as stateUndDispatch,
   };
 
   return (
@@ -54,6 +58,7 @@ export function useStore() {
   const kari: StoreState = {
     shiritoriReducer: useShiritoriReducer() as stateUndDispatch,
     matchingReducer: useMatchingReducer() as stateUndDispatch,
+    robotReducer: useRobotReducer() as stateUndDispatch,
   };
   return kari;
 }
