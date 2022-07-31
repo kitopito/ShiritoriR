@@ -175,6 +175,9 @@ export class RandomBuff implements DependencyInjectable {
             } else if(nextHistory.game == 'end') {
             // gameがendなら相手の負けとする
                 this.win();
+                // 勝ったほうが後片付けをする。ルームを消す
+                const { error } = await supabase.from('rooms')
+                    .delete().match({room_id: this.matchingState.roomId});
             }
             supabase.removeSubscription(subscription);
         }).subscribe();

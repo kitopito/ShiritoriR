@@ -3,7 +3,7 @@
 
 import { Head, useData } from "aleph/react";
 import React, { useState, useReducer, useEffect, useMemo } from 'react';
-import { RandomBuff, RandomBuffSupplyer } from "../../logic_buff/random_buff.ts";
+import { RandomBuff, RandomBuffSupplyer } from "../../buffer/random_buff.ts";
 import { useDI } from "../../di/useDI.tsx";
 import { MatchingState } from "../../hooks/useMatchingReducer.ts";
 
@@ -16,7 +16,7 @@ export default function Random() {
   console.log(randomBuff.nextWordInput);
   console.log(randomBuff.previousWord);
 
-  // strictモードのせいでuseEffectが二回呼ばれてる可能性が微レ存
+  // strictモードのせいでuseEffectが二回呼ばれてるので本番モードで実行すること
   useEffect(() => {
       console.log("ふがふが use effect");
       randomBuff.toWaitingState();
