@@ -160,7 +160,7 @@ export class RandomBuff implements DependencyInjectable {
             data: MatchingState.OPPONENTTURN});
         
         // roomが更新されるまで待つ
-        const subscription = supabase.from("rooms").on('UPDATE', (payload) => {
+        const subscription = supabase.from("rooms").on('UPDATE', async (payload) => {
             console.log("ふがふが　supabase update されたナリ");
             console.log(payload);
             const newData = payload.new;
