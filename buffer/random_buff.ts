@@ -48,6 +48,7 @@ export class RandomBuff implements DependencyInjectable {
         this.dispatch({type: 'CHANGE_VALUE', data: _word, field: 'previousWord'});
     }
     
+    // deno-lint-ignore require-await
     async submission() {
         console.log("ほげ");
         console.log(this.state.nextWordInput);
@@ -69,13 +70,24 @@ export class RandomBuff implements DependencyInjectable {
         
 //                para.innerText = `前の単語:${previousWord}`;
         */
-        if(this.isEndingAtN(nextWord)) {
+        if(this.isEndingAtN(nextWord)) {(async () => {
             // 「ん」で終わっていたら負けにする
             this.lose();
+            // 負けたことを相手に伝える
+            const rooms = (await supabase.from('rooms').select("*")).data;
+            // 仮の実装としてroomsの配列の最初を取るようにする
+            const currentData = rooms[0];
+            currentData.history.push({word: nextWord, game: 'end'})
+            const { error } = await supabase
+                .from('rooms')
+                .update([{history: currentData.history}])
+                .match({room_id: this.matchingState.roomId});
+
+        })();
             return;
         }
 
-        if(this.logic.isWordUpdatable(this.previousWord, nextWord, this.state.wordHistory)) {
+        if(this.logic.isWordUpdatable(this.previousWord, nextWord, this.state.wordHistory)) {(async () =>{
             this.PreviousWord = nextWord;
             console.log(this.previousWord);
             
@@ -100,7 +112,7 @@ export class RandomBuff implements DependencyInjectable {
             this.NextWord = '';
 
             this.toOpponentTurn();
-        }
+        })();}
     }
     
     reset() {
@@ -160,8 +172,8 @@ export class RandomBuff implements DependencyInjectable {
             if(nextHistory.game == 'continue') {
                 this.toMyTurn();
                 console.log("俺のターン！");
-            } else if(nextHistory.game == 'lost') {
-            // gameがlostなら相手の負けとする
+            } else if(nextHistory.game == 'end') {
+            // gameがendなら相手の負けとする
                 this.win();
             }
             supabase.removeSubscription(subscription);
@@ -265,7 +277,8 @@ export class RandomBuff implements DependencyInjectable {
             console.log("ふがふが　subscription");
             // waitingのデータが消されたらroomに参加して自分の番にする
             // もともとはinsertのほうが先だったけど間に合わないからsubscriptionを前にした
-            const subscriptionD = supabase.from("wating").on('DELETE', (payload) => {
+            const subscriptionD = await supabase.from("wating").on('DELETE', (payload) => {
+                console.log("ふがふが　消されたナリ");
                 const roomId = userIdText;
                 this.matchingDispatch({type: "SET_ROOM_ID", data: roomId});
                 this.matchingDispatch({
@@ -275,15 +288,16 @@ export class RandomBuff implements DependencyInjectable {
                 supabase.removeSubscription(subscriptionD);
             }).subscribe();
 
+            console.log("ふがふが　insert");
 //            try {
                 console.log("ふがふが　insert するのだ");
                 const { error } = await supabase
                     .from('wating')
                     .insert([{user_id: userIdText}]);
+            /*
                 if(error) {
                     throw error;
                 }
-            /*
             } catch(error) {
                 alert("ぴよぴよ supabase insert error ナリ");
             }

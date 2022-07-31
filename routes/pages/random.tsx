@@ -38,7 +38,9 @@ export default function Random() {
 
   switch(randomBuff.pageState) {
     case MatchingState.MATCHING: return (
-      <h1>相手を待っています．．．</h1>
+      <div>
+        <h1>相手を待っています．．．</h1>
+      </div>
     );
     case MatchingState.LOSE: return (
       <h1>負けた！！</h1>
