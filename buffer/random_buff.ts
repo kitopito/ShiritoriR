@@ -5,6 +5,7 @@ import { RandomLogic, RandomLogicSupplyer } from "../logic/random_logic.ts";
 import { useStore } from "../hooks/store.tsx";
 import { supabase } from "../supabase.ts";
 import { MatchingState } from "../hooks/useMatchingReducer.ts";
+import { Dictionary } from "../dictionary.ts";
 
 export const RandomBuffSupplyer = new Supplyer<RandomBuff>(() => {
     console.log("ふがふが　rancom buff supplyer called");
