@@ -290,7 +290,7 @@ export class RandomBuff implements DependencyInjectable {
                 const rooms = (await supabase.from('rooms').select("*")).data;
                 // 仮の実装としてroomsの配列の最初を取るようにする
                 const currentData = rooms[0];
-                const firstWord = currentData.history[0];
+                const firstWord = currentData.history[0].word;
                 this.PreviousWord = firstWord;
                 this.addWordHistory(firstWord);
 
