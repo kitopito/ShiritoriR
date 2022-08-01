@@ -8,6 +8,7 @@ import { RobotBuff, RobotBuffSupplyer } from "../../buffer/robot_buff.ts";
 import { useDI } from "../../di/useDI.tsx";
 import { RobotPageState } from "../../hooks/useRobotReducer.ts";
 
+let containerHeight = 260;
 
 export default function Robo() {
 
@@ -23,6 +24,9 @@ export default function Robo() {
     document.body.className = "robo";
   });
   */
+  useEffect(() => {
+    containerHeight = document.body.clientHeight * 0.3;
+  });
   useEffect(() => {
       console.log("ふがふが use effect");
       const width = document.body.clientWidth;
@@ -58,7 +62,7 @@ export default function Robo() {
 
     case RobotPageState.LOSE: return (
       <Container textAlign="center">
-        <Container style={{height:'20rem',}}></Container>
+        <Container style={{height:{containerHeight},}}></Container>
         <Header size="huge">キミは勝てるか！！</Header>
         <Header size="huge">最強しりとりロボ</Header>
 
@@ -69,7 +73,7 @@ export default function Robo() {
 
     case RobotPageState.WIN: return (
       <Container textAlign="center">
-        <Container style={{height:'20rem',}}></Container>
+        <Container style={{height:containerHeight,}}></Container>
         <Header size="huge">キミは勝てるか！！</Header>
         <Header size="huge">最強しりとりロボ</Header>
 
@@ -80,7 +84,7 @@ export default function Robo() {
 
     case RobotPageState.ROBOTTURN: return (
       <Container textAlign="center">
-        <Container style={{height:'20rem',}}></Container>
+        <Container style={{height:containerHeight,}}></Container>
         <Header size="huge">キミは勝てるか！！</Header>
         <Header size="huge">最強しりとりロボ</Header>
 
@@ -95,7 +99,7 @@ export default function Robo() {
     case RobotPageState.MYTURN: return (
   // from  https://illustimage.com/?dl=5380
     <Container as="article" direction="column" gap={2} p="4" borderWidth="1px" borderRadius="lg" align="center">
-      <Container style={{height:'20rem',}}></Container>
+      <Container style={{height:containerHeight,}}></Container>
       <Header size="huge">キミは勝てるか！！</Header>
       <Header size="huge">最強しりとりロボ</Header>
       
