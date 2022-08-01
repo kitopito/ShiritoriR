@@ -32,7 +32,12 @@ export class RobotBuff implements DependencyInjectable {
 //        });
 
 //        this.reset();
-        this.setFirstWord();
+
+        /* setFirstWordはもともとこの位置で呼び出していたが、
+           環境によってはコンストラクタが何度も呼ばれる(インスタンスが何度も
+           作り直される)ため何度も呼び出されると困るような処理はコンストラクタに
+           書いてはいけません */
+//        this.setFirstWord();
     }
 
     set NextWord(_word: string) {
@@ -172,7 +177,7 @@ export class RobotBuff implements DependencyInjectable {
             data: RobotPageState.WIN});
     }
     
-    private setFirstWord() {
+    public setFirstWord() {
         const dictionaryLength = Dictionary.length;
         const randomIndex = Math.floor(Math.random() * dictionaryLength);
         const _index = Dictionary[randomIndex];

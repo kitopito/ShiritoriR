@@ -34,6 +34,7 @@ export default function Robo() {
         document.body.className = "";
       }
 
+      robotBuff.setFirstWord();
       robotBuff.toMyTurn();
   },[1]);
 
