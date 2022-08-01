@@ -1,7 +1,7 @@
 // support jsx on deno deploy
 //
 /** @jsxImportSource https://esm.sh/react@18.2.0 */
-import React, { useState, FC, useMemo} from 'react';
+import React, { useState, FC, useMemo, useEffect} from 'react';
 import { Link } from 'aleph/react';
 //import { Button } from "https://esm.sh/antd?bundle";
 //import {Button, Paper, Tabs, Tab} from 'material-ui-core';

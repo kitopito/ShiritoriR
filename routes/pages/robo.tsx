@@ -3,21 +3,37 @@
 
 import { Head, useData } from "aleph/react";
 import React, { useState, useMemo, useEffect } from 'react';
-import { Header, Container, Grid, Label, Button, Input, Dimmer, Loader } from "https://esm.sh/semantic-ui-react";
+import { Header, Container, Grid, Label, Button, Input, Dimmer, Loader, Segment, Divider } from "https://esm.sh/semantic-ui-react";
 import { RobotBuff, RobotBuffSupplyer } from "../../buffer/robot_buff.ts";
 import { useDI } from "../../di/useDI.tsx";
 import { RobotPageState } from "../../hooks/useRobotReducer.ts";
 
 
 export default function Robo() {
+
   const robotBuff = useDI<RobotBuff>(RobotBuffSupplyer);
   console.log("ふがふが robot page 作ったナリ ");
   console.log(robotBuff.nextWordInput);
   console.log(robotBuff.previousWord);
 
   // strictモードのせいでuseEffectが二回呼ばれてるので本番モードで実行すること
+  /*
+  useEffect(() => {
+    // document治外法権 useEffectの中でだけdocument.bodyを取得することが可能
+    document.body.className = "robo";
+  });
+  */
   useEffect(() => {
       console.log("ふがふが use effect");
+      const width = document.body.clientWidth;
+      console.log(width);
+      // document治外法権 useEffectの中でだけdocument.bodyを取得することが可能
+      document.body.className = "robo";
+      // ページを離れるときにbodyのクラスをもどす
+      window.onbeforeunload = (event) => {
+        document.body.className = "";
+      }
+
       robotBuff.toMyTurn();
   },[1]);
 
@@ -41,24 +57,29 @@ export default function Robo() {
 
     case RobotPageState.LOSE: return (
       <Container textAlign="center">
+        <Container style={{height:'20rem',}}></Container>
         <Header size="huge">キミは勝てるか！！</Header>
         <Header size="huge">最強しりとりロボ</Header>
 
-        <h1>あなたの負け！！</h1>
+        <Header size="huge">あなたの負け！！</Header>
+        <Header as="h2">最期の言葉: {robotBuff.previousWord}</Header>
       </Container>
     );
 
     case RobotPageState.WIN: return (
       <Container textAlign="center">
+        <Container style={{height:'20rem',}}></Container>
         <Header size="huge">キミは勝てるか！！</Header>
         <Header size="huge">最強しりとりロボ</Header>
 
-        <h1>参りました．．．</h1>
+        <Header size="huge">参りました．．．</Header>
+        <Header as="h2">最後の言葉: {robotBuff.previousWord}</Header>
       </Container>
     );
 
     case RobotPageState.ROBOTTURN: return (
       <Container textAlign="center">
+        <Container style={{height:'20rem',}}></Container>
         <Header size="huge">キミは勝てるか！！</Header>
         <Header size="huge">最強しりとりロボ</Header>
 
@@ -72,9 +93,13 @@ export default function Robo() {
 
     case RobotPageState.MYTURN: return (
   // from  https://illustimage.com/?dl=5380
-    <Container as="article" className="robo" direction="column" gap={2} p="4" borderWidth="1px" borderRadius="lg" align="center">
+    <Container as="article" direction="column" gap={2} p="4" borderWidth="1px" borderRadius="lg" align="center">
+      <Container style={{height:'20rem',}}></Container>
       <Header size="huge">キミは勝てるか！！</Header>
       <Header size="huge">最強しりとりロボ</Header>
+      
+      <Container className="robo" >
+      </Container>
 
       <Grid columns={2}><Grid.Row verticalAlign="middle">
         <Grid.Column width={8} textAlign="right">
@@ -93,7 +118,7 @@ export default function Robo() {
             }}/>
         </Grid.Column>
         <Grid.Column width={8} textAlign="left">
-          <Button onClick={() => {
+          <Button color="green" onClick={() => {
             robotBuff.submission();
           }}>送信</Button>
         </Grid.Column>

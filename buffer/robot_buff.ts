@@ -117,7 +117,8 @@ export class RobotBuff implements DependencyInjectable {
             data: RobotPageState.MYTURN});
     }
     
-    public robotTurn() {
+    // 500ms待ってから実行される
+    public robotTurn() { setTimeout(() => {
         let wordFound: boolean = false;
         const _previousWord = this.state.previousWord;
         const lastCharacter = _previousWord.charAt(_previousWord.length - 1);
@@ -151,7 +152,7 @@ export class RobotBuff implements DependencyInjectable {
         if(wordFound == false) {
             this.win();
         }
-    }
+    }, 500);}
 
     private toRobotTurn() {
         this.roboDispatch({
