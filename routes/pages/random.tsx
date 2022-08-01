@@ -21,8 +21,19 @@ export default function Random() {
   useEffect(() => {
       console.log("ふがふが use effect");
       randomBuff.toWaitingState();
+
 //      UIのテストのためにすぐ自分の番にする
 //      randomBuff.toMyTurn();
+
+      // ページを離れるときは必ずsupabaseをリセットする
+      window.onbeforeunload = (event) => {
+        randomBuff.resetSupabase();
+      }
+      history.replaceState(null, null, null);
+      window.addEventListener('popstate', function(e) {
+        // これは戻るボタンが押されたときに実行される
+        randomBuff.resetSupabase();
+      });
   },[1]);
 
   console.log("ふがふが previous word: ");

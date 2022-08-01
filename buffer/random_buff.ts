@@ -326,6 +326,26 @@ export class RandomBuff implements DependencyInjectable {
         }
     }
     
+    public async resetSupabase() {
+        // waitingのレコードを全消しする
+        const waitings = (await supabase.from('wating').select('*')).data;
+        waitings?.forEach(async (value, index, array) => {try {
+            console.log("ふがふが　delete するのだ");
+            const { error } = await supabase.from('wating')
+                .delete().match({id: value.id});
+            if(error) {throw error;}
+        } catch(error) {alert("ぴよぴよ supabase waiting delete error ナリ");}});
+
+        // roomsのレコードを全消しする
+        const rooms = (await supabase.from('rooms').select('*')).data;
+        waitings?.forEach(async (value, index, array) => {try {
+            console.log("ふがふが　delete するのだ");
+            const { error } = await supabase.from('rooms')
+                .delete().match({id: value.id});
+            if(error) {throw error;}
+        } catch(error) {alert("ぴよぴよ supabase rooms delete error ナリ");}});
+    }
+    
     public TYPE = 'RandomBuff';
     public SUPPLYER: Supplyer<RandomBuff> = RandomBuffSupplyer;
     public updateState() {
