@@ -62,7 +62,7 @@ export default function Robo() {
 
     case RobotPageState.LOSE: return (
       <Container textAlign="center">
-        <Container style={{height:{containerHeight},}}></Container>
+        <Container style={{height:containerHeight,}}></Container>
         <Header size="huge">キミは勝てるか！！</Header>
         <Header size="huge">最強しりとりロボ</Header>
 
