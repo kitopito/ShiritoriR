@@ -74,8 +74,14 @@ export default function Random() {
     case MatchingState.OPPONENTTURN: return (
       <Container textAlign="center">
         <Header as="h1">ランダム対戦中です</Header>
-        <Header as="h2">相手の番です</Header>
-        <p id="previousWord">前の単語:{randomBuff.previousWord}</p>
+        <Grid columns={2}><Grid.Row verticalAlign="middle">
+          <Grid.Column width={8} textAlign="right">
+            <Header as="h2">相手の番</Header>
+          </Grid.Column>
+          <Grid.Column width={8} textAlign="left">
+            <Header as="h3">前の単語:{randomBuff.previousWord}</Header>
+          </Grid.Column>
+        </Grid.Row></Grid>
       </Container>
     );
 
