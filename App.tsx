@@ -6,14 +6,30 @@ import { Link } from 'aleph/react';
 //import { Button } from "https://esm.sh/antd?bundle";
 //import {Button, Paper, Tabs, Tab} from 'material-ui-core';
 //import { Button } from "https://cdn.skypack.dev/semantic-ui-react";
-import { Button, Container, Header, Divider } from "https://esm.sh/semantic-ui-react";
+import { Button, Container, Header, Divider, Grid, Dimmer, Loader } from "https://esm.sh/semantic-ui-react";
+import { supabase } from "./supabase.ts";
 
 export default function App() {
+    const [accesCounter, setCounter] = useState(0);
+    const [isLoading, setIsLoading] = useState(true);
+    useEffect(()=>{(async ()=>{
+        const currentCounter = (await supabase.from('counter').select('*')).data[0];
+        console.log(currentCounter);
+        setCounter(currentCounter.value + 1);
+        const { error } = await supabase
+            .from('counter')
+            .update([{value: currentCounter.value + 1}])
+            .match({id: 1});
+        
+        setIsLoading(false);
+    })();},[1]);
 
-    return(
-        <div>
+    return isLoading == false 
+        ?(<Container textAlign="center" direction="column" >
+            <Header size='huge' className='rainbow' style={{fontSize:"5rem"}}>
+                 SHIRITORING BAY
+            </Header>
             <Container textAlign="center" direction="column" >
-            <Header size='huge'>SHIRITORING BAY</Header>
             <Divider section></Divider>
             <Header as="h2">オンライン対戦</Header>
             <nav className="mt-8">
@@ -26,12 +42,42 @@ export default function App() {
               </Link>
             </nav>
             <Divider section></Divider>
+
             <Header as="h2">ロボ対戦</Header>
             <Button as="a" href="./pages/robo">Fight!</Button>
             <Divider section></Divider>
+
+            <Header as="h2">ストーリーモード(未実装)</Header>
+            <Grid columns="equal" textAlign='center'>
+                <Grid.Column width={3}>
+                    <Button as="a" href="./pages/koji">第一章</Button>
+                </Grid.Column>
+                <Grid.Column width={3}>
+                    <Button as="a" href="./pages/koji">第二章</Button>
+                </Grid.Column>
+                <Grid.Column width={3}>
+                    <Button as="a" href="./pages/koji">第三章</Button>
+                </Grid.Column>
+                <Grid.Column width={3}>
+                    <Button as="a" href="./pages/koji">第四章</Button>
+                </Grid.Column>
+            </Grid>
+            <Divider section></Divider>
+
+            <Header as="h2">あなたは {accesCounter} 人目</Header>
+            <Header as="h2">の訪問者です</Header>
+            <Header as="h2">
+                {accesCounter % 100 == 0 
+                    ? 'キリ番ゲット！！おめでとう！！' : ''}
+                </Header>
             </Container>
-        </div>
-    );
+        </Container>)
+
+        :(
+            <Container><Dimmer active inverted>
+                <Loader>読み込み中．．．</Loader>
+            </Dimmer></Container>
+        );
     /*
     */
         

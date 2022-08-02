@@ -157,7 +157,7 @@ export class RobotBuff implements DependencyInjectable {
         if(wordFound == false) {
             this.win();
         }
-    }, 500);}
+    }, 900);}
 
     private toRobotTurn() {
         this.roboDispatch({

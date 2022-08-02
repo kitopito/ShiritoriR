@@ -13,3 +13,11 @@ body {
     background-color: rgba(255,255,255,0.8);
     background-blend-mode: lighten;
 }
+
+.rainbow{
+    background: linear-gradient(to right,#e60000,#f39800,#fff100,#009944,#0068b7,#1d2088,#920783);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+    display: inline-block;
+}

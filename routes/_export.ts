@@ -6,9 +6,10 @@ import * as $1 from "./_app.tsx";
 import * as $2 from "./index.tsx";
 import * as $3 from "./todos.tsx";
 import * as $4 from "./api/shiritori.ts";
-import * as $5 from "./pages/online.tsx";
-import * as $6 from "./pages/random.tsx";
-import * as $7 from "./pages/robo.tsx";
+import * as $5 from "./pages/koji.tsx";
+import * as $6 from "./pages/online.tsx";
+import * as $7 from "./pages/random.tsx";
+import * as $8 from "./pages/robo.tsx";
 
 export default {
   "/_404": $0,
@@ -16,7 +17,8 @@ export default {
   "/": $2,
   "/todos": $3,
   "/api/shiritori": $4,
-  "/pages/online": $5,
-  "/pages/random": $6,
-  "/pages/robo": $7,
+  "/pages/koji": $5,
+  "/pages/online": $6,
+  "/pages/random": $7,
+  "/pages/robo": $8,
 };
