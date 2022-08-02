@@ -257,7 +257,7 @@ export class RandomBuff implements DependencyInjectable {
                 this.addWordHistory(_word);
 
                 try {
-                    console.log("ふがふが　insert するナリ");
+                    console.log("ふがふが　update するナリ");
                     const { error } = await supabase
                         .from('rooms')
                         .update([{history: [{word: _word, game: 'continue'}]}])
@@ -334,16 +334,18 @@ export class RandomBuff implements DependencyInjectable {
             const { error } = await supabase.from('wating')
                 .delete().match({id: value.id});
             if(error) {throw error;}
-        } catch(error) {alert("ぴよぴよ supabase waiting delete error ナリ");}});
+        } catch(error) {/*alert("ぴよぴよ supabase waiting delete error ナリ");*/}});
 
         // roomsのレコードを全消しする
         const rooms = (await supabase.from('rooms').select('*')).data;
-        waitings?.forEach(async (value, index, array) => {try {
+        console.log(rooms);
+        rooms?.forEach(async (value, index, array) => {try {
             console.log("ふがふが　delete するのだ");
             const { error } = await supabase.from('rooms')
                 .delete().match({id: value.id});
             if(error) {throw error;}
-        } catch(error) {alert("ぴよぴよ supabase rooms delete error ナリ");}});
+        } catch(error) {/*alert("ぴよぴよ supabase rooms delete error ナリ");*/}});
+        console.log("ふがふが　delete したのだ");
     }
     
     public TYPE = 'RandomBuff';

@@ -26,13 +26,13 @@ export default function Random() {
 //      randomBuff.toMyTurn();
 
       // ページを離れるときは必ずsupabaseをリセットする
-      window.onbeforeunload = (event) => {
-        randomBuff.resetSupabase();
+      window.onbeforeunload = async (event) => {
+        await randomBuff.resetSupabase();
       }
       history.replaceState(null, null, null);
-      window.addEventListener('popstate', function(e) {
+      window.addEventListener('popstate', async (e) => {
         // これは戻るボタンが押されたときに実行される
-        randomBuff.resetSupabase();
+        await randomBuff.resetSupabase();
       });
   },[1]);
 
@@ -58,11 +58,17 @@ export default function Random() {
     );
 
     case MatchingState.LOSE: return (
-      <h1>負けた！！</h1>
+      <Container textAlign="center">
+        <Header size="huge">負けた！！</Header>
+        <Header as="h2">最期の言葉: {randomBuff.previousWord}</Header>
+      </Container>
     );
 
     case MatchingState.WIN: return (
-      <h1>勝った！！</h1>
+      <Container textAlign="center">
+        <Header size="huge">勝った！！</Header>
+        <Header as="h2">最期の言葉: {randomBuff.previousWord}</Header>
+      </Container>
     );
 
     case MatchingState.OPPONENTTURN: return (
