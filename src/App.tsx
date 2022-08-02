@@ -71,6 +71,7 @@ export default function App() {
                     ? 'キリ番ゲット！！おめでとう！！' : ''}
                 </Header>
             </Container>
+            <Container style={{height:"5rem",}}></Container>
         </Container>)
 
         :(
