@@ -130,7 +130,7 @@ export class RobotBuff implements DependencyInjectable {
 
         // dictionaryからランダムで単語を探す
         const dictionaryLength = Dictionary.length;
-        for(let i=0;i<100;i++) {
+        for(let i=0;i<500;i++) {
             const randomIndex = Math.floor(Math.random() * dictionaryLength);
             const _index = Dictionary[randomIndex];
             const _word = _index.word;
@@ -153,7 +153,7 @@ export class RobotBuff implements DependencyInjectable {
                 break;
             }
         }
-        // 百回探しても単語が無かった場合は負けを認める
+        // 五百回探しても単語が無かった場合は負けを認める
         if(wordFound == false) {
             this.win();
         }
